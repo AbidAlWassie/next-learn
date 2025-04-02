@@ -1,16 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -23,18 +31,19 @@ const formSchema = z.object({
       message: "Subdomain must be at least 3 characters.",
     })
     .regex(/^[a-z0-9-]+$/, {
-      message: "Subdomain can only contain lowercase letters, numbers, and hyphens.",
+      message:
+        "Subdomain can only contain lowercase letters, numbers, and hyphens.",
     }),
   customDomain: z.string().optional(),
-})
+});
 
 interface NewCourseFormProps {
-  userId: string
+  userId: string;
 }
 
 export function NewCourseForm({ userId }: NewCourseFormProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,10 +53,10 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
       subdomain: "",
       customDomain: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/courses", {
@@ -59,27 +68,24 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
           ...values,
           userId,
         }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to create course")
+        throw new Error("Failed to create course");
       }
 
-      const course = await response.json()
-      toast({
-        title: "Course created",
+      const course = await response.json();
+      toast.success("Course created", {
         description: "Your course has been created successfully.",
-      })
-      router.push(`/dashboard/courses/${course.id}`)
-      router.refresh()
+      });
+      router.push(`/dashboard/courses/${course.id}`);
+      router.refresh();
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "Failed to create course. Please try again.",
-        variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -95,9 +101,15 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
                 <FormItem>
                   <FormLabel>Course Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Web Development Fundamentals" {...field} />
+                    <Input
+                      placeholder="Web Development Fundamentals"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>This is the name of your course as it will appear to students.</FormDescription>
+                  <FormDescription>
+                    This is the name of your course as it will appear to
+                    students.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -115,7 +127,8 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
                     />
                   </FormControl>
                   <FormDescription>
-                    Provide a brief description of your course to help students understand what they will learn.
+                    Provide a brief description of your course to help students
+                    understand what they will learn.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -130,10 +143,14 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
                   <FormControl>
                     <div className="flex items-center">
                       <Input placeholder="web-dev" {...field} />
-                      <span className="ml-2 text-muted-foreground">.yourdomain.com</span>
+                      <span className="ml-2 text-muted-foreground">
+                        .yourdomain.com
+                      </span>
                     </div>
                   </FormControl>
-                  <FormDescription>This will be used to create a unique URL for your course.</FormDescription>
+                  <FormDescription>
+                    This will be used to create a unique URL for your course.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -147,7 +164,9 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
                   <FormControl>
                     <Input placeholder="course.example.com" {...field} />
                   </FormControl>
-                  <FormDescription>If you have a custom domain, you can use it for your course.</FormDescription>
+                  <FormDescription>
+                    If you have a custom domain, you can use it for your course.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -159,6 +178,5 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-

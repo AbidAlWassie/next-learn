@@ -1,24 +1,30 @@
-import Link from "next/link"
-import { auth, signOut } from "@/app/(auth)/auth"
-import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { auth, signOut } from "@/app/(auth)/auth";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export async function NavBar() {
-  const session = await auth()
+  const session = await auth();
 
   return (
     <header className="border-b">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="text-2xl font-bold">
-            LearnHub
+            NextLearn
           </Link>
           <nav className="hidden md:flex gap-6">
-            <Link href="/courses" className="text-sm font-medium hover:underline">
+            <Link
+              href="/courses"
+              className="text-sm font-medium hover:underline"
+            >
               Courses
             </Link>
             {session?.user && (
-              <Link href="/dashboard" className="text-sm font-medium hover:underline">
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium hover:underline"
+              >
                 Dashboard
               </Link>
             )}
@@ -35,8 +41,8 @@ export async function NavBar() {
               </Link>
               <form
                 action={async () => {
-                  "use server"
-                  await signOut({ redirectTo: "/" })
+                  "use server";
+                  await signOut({ redirectTo: "/" });
                 }}
               >
                 <Button type="submit" variant="ghost" size="sm">
@@ -52,6 +58,5 @@ export async function NavBar() {
         </div>
       </div>
     </header>
-  )
+  );
 }
-
