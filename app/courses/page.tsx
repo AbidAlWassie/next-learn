@@ -52,7 +52,7 @@ export default async function CoursesPage() {
           {courses.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {courses.map((course) => (
-                <Link key={course.id} href={`/courses/${course.subdomain}`}>
+                <Link key={course.id} href={`/courses/${course.courseName}`}>
                   <Card className="h-full overflow-hidden transition-all hover:border-primary">
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between">

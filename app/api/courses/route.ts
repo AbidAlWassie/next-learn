@@ -1,3 +1,4 @@
+// app/api/courses/route.ts
 import { auth } from "@/app/(auth)/auth";
 import { prisma } from "@/lib/prisma";
 import { type NextRequest, NextResponse } from "next/server";
@@ -11,41 +12,25 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { name, description, subdomain, customDomain, userId } = body;
+    const { name, description, courseName, userId } = body;
 
     // Verify that the authenticated user is the same as the user ID in the request
     if (session.user.id !== userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if subdomain is already taken
+    // Check if courseName is already taken
     const existingCourse = await prisma.course.findUnique({
       where: {
-        subdomain,
+        courseName,
       },
     });
 
     if (existingCourse) {
       return NextResponse.json(
-        { error: "Subdomain already taken" },
+        { error: "CourseName already taken" },
         { status: 400 }
       );
-    }
-
-    // Check if custom domain is already taken (if provided)
-    if (customDomain) {
-      const existingCustomDomain = await prisma.course.findUnique({
-        where: {
-          customDomain,
-        },
-      });
-
-      if (existingCustomDomain) {
-        return NextResponse.json(
-          { error: "Custom domain already taken" },
-          { status: 400 }
-        );
-      }
     }
 
     // Create the course
@@ -53,8 +38,7 @@ export async function POST(req: NextRequest) {
       data: {
         name,
         description,
-        subdomain,
-        customDomain,
+        courseName,
         userId,
       },
     });

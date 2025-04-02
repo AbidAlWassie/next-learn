@@ -25,16 +25,15 @@ const formSchema = z.object({
     message: "Course name must be at least 3 characters.",
   }),
   description: z.string().optional(),
-  subdomain: z
+  courseName: z
     .string()
     .min(3, {
-      message: "Subdomain must be at least 3 characters.",
+      message: "Course name must be at least 3 characters.",
     })
     .regex(/^[a-z0-9-]+$/, {
       message:
-        "Subdomain can only contain lowercase letters, numbers, and hyphens.",
+        "Course name can only contain lowercase letters, numbers, and hyphens.",
     }),
-  customDomain: z.string().optional(),
 });
 
 interface NewCourseFormProps {
@@ -50,8 +49,7 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
     defaultValues: {
       name: "",
       description: "",
-      subdomain: "",
-      customDomain: "",
+      courseName: "",
     },
   });
 
@@ -99,7 +97,7 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Course Name</FormLabel>
+                  <FormLabel>Course Title</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Web Development Fundamentals"
@@ -107,7 +105,7 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
                     />
                   </FormControl>
                   <FormDescription>
-                    This is the name of your course as it will appear to
+                    This is the title of your course as it will appear to
                     students.
                   </FormDescription>
                   <FormMessage />
@@ -136,36 +134,20 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
             />
             <FormField
               control={form.control}
-              name="subdomain"
+              name="courseName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subdomain</FormLabel>
+                  <FormLabel>Course URL Name</FormLabel>
                   <FormControl>
                     <div className="flex items-center">
                       <Input placeholder="web-dev" {...field} />
                       <span className="ml-2 text-muted-foreground">
-                        .yourdomain.com
+                        (for URL)
                       </span>
                     </div>
                   </FormControl>
                   <FormDescription>
                     This will be used to create a unique URL for your course.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="customDomain"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Custom Domain (Optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="course.example.com" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    If you have a custom domain, you can use it for your course.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

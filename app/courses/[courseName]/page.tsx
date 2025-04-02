@@ -1,3 +1,4 @@
+// app/courses/[courseName]/page.tsx
 import { auth } from "@/app/(auth)/auth";
 import { NavBar } from "@/components/nav-bar";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +17,7 @@ import { notFound } from "next/navigation";
 
 interface CoursePageProps {
   params: {
-    subdomain: string;
+    courseName: string;
   };
 }
 
@@ -25,7 +26,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   const course = await prisma.course.findUnique({
     where: {
-      subdomain: params.subdomain,
+      courseName: params.courseName,
     },
     include: {
       user: {
@@ -98,7 +99,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 {course.posts.map((post) => (
                   <Link
                     key={post.id}
-                    href={`/courses/${course.subdomain}/${post.slug}`}
+                    href={`/courses/${course.courseName}/${post.slug}`}
                   >
                     <Card className="h-full overflow-hidden transition-all hover:border-primary">
                       <CardHeader className="pb-3">

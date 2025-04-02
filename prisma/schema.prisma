@@ -80,8 +80,7 @@ model Course {
   name        String
   description String?
   logo        String?
-  subdomain   String    @unique
-  customDomain String?  @unique
+  courseName   String    @unique
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   posts       Post[]

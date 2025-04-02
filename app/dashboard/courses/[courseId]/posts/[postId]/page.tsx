@@ -56,7 +56,7 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
             <Button variant="outline">Edit Post</Button>
           </Link>
           <Link
-            href={`/courses/${post.course.subdomain}/${post.slug}`}
+            href={`/courses/${post.course.courseName}/${post.slug}`}
             target="_blank"
           >
             <Button>View Post</Button>

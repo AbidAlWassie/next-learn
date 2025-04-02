@@ -1,11 +1,18 @@
-import Link from "next/link"
-import type { Course } from "@prisma/client"
-import { formatDistanceToNow } from "date-fns"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import type { Course } from "@prisma/client";
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 interface CourseListProps {
-  courses: Course[]
+  courses: Course[];
 }
 
 export function CourseList({ courses }: CourseListProps) {
@@ -15,7 +22,8 @@ export function CourseList({ courses }: CourseListProps) {
         <div className="text-center">
           <h3 className="text-lg font-medium">No courses yet</h3>
           <p className="text-sm text-muted-foreground">
-            You haven&apos;t created any courses yet. Start creating content now.
+            You haven&apos;t created any courses yet. Start creating content
+            now.
           </p>
         </div>
         <Link href="/dashboard/courses/new">
@@ -24,7 +32,7 @@ export function CourseList({ courses }: CourseListProps) {
           </div>
         </Link>
       </div>
-    )
+    );
   }
 
   return (
@@ -34,20 +42,26 @@ export function CourseList({ courses }: CourseListProps) {
           <Card className="h-full overflow-hidden transition-all hover:border-primary">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="line-clamp-1 text-lg">{course.name}</CardTitle>
+                <CardTitle className="line-clamp-1 text-lg">
+                  {course.name}
+                </CardTitle>
               </div>
-              <CardDescription className="line-clamp-2">{course.description || "No description"}</CardDescription>
+              <CardDescription className="line-clamp-2">
+                {course.description || "No description"}
+              </CardDescription>
             </CardHeader>
             <CardContent className="pb-3">
-              <Badge variant="outline">{course.subdomain}</Badge>
+              <Badge variant="outline">{course.courseName}</Badge>
             </CardContent>
             <CardFooter className="text-xs text-muted-foreground">
-              Updated {formatDistanceToNow(new Date(course.updatedAt), { addSuffix: true })}
+              Updated{" "}
+              {formatDistanceToNow(new Date(course.updatedAt), {
+                addSuffix: true,
+              })}
             </CardFooter>
           </Card>
         </Link>
       ))}
     </div>
-  )
+  );
 }
-

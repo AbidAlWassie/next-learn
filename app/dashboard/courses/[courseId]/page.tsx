@@ -76,19 +76,11 @@ export default async function CourseDetailPage({
                 </p>
               </div>
               <div>
-                <h3 className="font-medium">Subdomain</h3>
+                <h3 className="font-medium">CourseName</h3>
                 <p className="text-sm text-muted-foreground">
-                  {course.subdomain}.yourdomain.com
+                  {course.courseName}.yourdomain.com
                 </p>
               </div>
-              {course.customDomain && (
-                <div>
-                  <h3 className="font-medium">Custom Domain</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {course.customDomain}
-                  </p>
-                </div>
-              )}
               <div className="pt-4">
                 <Link href={`/dashboard/courses/${course.id}/edit`}>
                   <Button variant="outline">Edit Course</Button>

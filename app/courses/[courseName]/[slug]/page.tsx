@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 
 interface PostPageProps {
   params: {
-    subdomain: string;
+    courseName: string;
     slug: string;
   };
 }
@@ -23,7 +23,7 @@ export default async function PostPage({ params }: PostPageProps) {
       slug: params.slug,
       published: true,
       course: {
-        subdomain: params.subdomain,
+        courseName: params.courseName,
       },
     },
     include: {
@@ -52,7 +52,7 @@ export default async function PostPage({ params }: PostPageProps) {
           <div className="mx-auto max-w-3xl">
             <div className="mb-8 space-y-4">
               <Link
-                href={`/courses/${params.subdomain}`}
+                href={`/courses/${params.courseName}`}
                 className="text-sm text-muted-foreground hover:underline"
               >
                 ← Back to {post.course.name}
