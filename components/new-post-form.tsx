@@ -1,18 +1,27 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import { toast } from "@/components/ui/use-toast"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
+// Define the schema with explicit types
 const formSchema = z.object({
   title: z.string().min(3, {
     message: "Title must be at least 3 characters.",
@@ -28,19 +37,23 @@ const formSchema = z.object({
   content: z.string().min(10, {
     message: "Content must be at least 10 characters.",
   }),
-  published: z.boolean().default(false),
+  published: z.boolean(),
   tags: z.string().optional(),
-})
+});
+
+// Define the type for our form values
+type FormValues = z.infer<typeof formSchema>;
 
 interface NewPostFormProps {
-  courseId: string
+  courseId: string;
 }
 
 export function NewPostForm({ courseId }: NewPostFormProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  // Use the FormValues type for the form
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
@@ -49,14 +62,17 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
       published: false,
       tags: "",
     },
-  })
+  });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+  // Use the FormValues type for the onSubmit function
+  async function onSubmit(values: FormValues) {
+    setIsLoading(true);
 
     try {
       // Convert tags string to array
-      const tagsArray = values.tags ? values.tags.split(",").map((tag) => tag.trim()) : []
+      const tagsArray = values.tags
+        ? values.tags.split(",").map((tag) => tag.trim())
+        : [];
 
       const response = await fetch("/api/posts", {
         method: "POST",
@@ -68,27 +84,24 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
           tags: tagsArray,
           courseId,
         }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to create post")
+        throw new Error("Failed to create post");
       }
 
-      const post = await response.json()
-      toast({
-        title: "Post created",
+      const post = await response.json();
+      toast.success("Post created", {
         description: "Your post has been created successfully.",
-      })
-      router.push(`/dashboard/courses/${courseId}/posts/${post.id}`)
-      router.refresh()
+      });
+      router.push(`/dashboard/courses/${courseId}/posts/${post.id}`);
+      router.refresh();
     } catch (error) {
-      toast({
-        title: "Error",
+      toast.error("Error", {
         description: "Failed to create post. Please try again.",
-        variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -120,7 +133,9 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                   <FormControl>
                     <Input placeholder="introduction-to-html" {...field} />
                   </FormControl>
-                  <FormDescription>This will be used in the URL of your post.</FormDescription>
+                  <FormDescription>
+                    This will be used in the URL of your post.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -132,9 +147,16 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                 <FormItem>
                   <FormLabel>Content</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Write your post content here..." className="min-h-[300px]" {...field} />
+                    <Textarea
+                      placeholder="Write your post content here..."
+                      className="min-h-[300px]"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>The content of your post. You can use Markdown for formatting.</FormDescription>
+                  <FormDescription>
+                    The content of your post. You can use Markdown for
+                    formatting.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -148,7 +170,9 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                   <FormControl>
                     <Input placeholder="html, css, beginner" {...field} />
                   </FormControl>
-                  <FormDescription>Comma-separated list of tags for your post.</FormDescription>
+                  <FormDescription>
+                    Comma-separated list of tags for your post.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -160,16 +184,26 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Published</FormLabel>
-                    <FormDescription>Make this post visible to students.</FormDescription>
+                    <FormDescription>
+                      Make this post visible to students.
+                    </FormDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                 </FormItem>
               )}
             />
             <div className="flex justify-end space-x-4">
-              <Button type="button" variant="outline" onClick={() => router.back()} disabled={isLoading}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.back()}
+                disabled={isLoading}
+              >
                 Cancel
               </Button>
               <Button type="submit" disabled={isLoading}>
@@ -180,6 +214,5 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-

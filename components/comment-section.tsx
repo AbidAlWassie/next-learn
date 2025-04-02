@@ -1,67 +1,67 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { formatDistanceToNow } from "date-fns"
-import { toast } from "@/components/ui/use-toast"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/use-toast";
+import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface Comment {
-  id: string
-  content: string
-  postId: string
-  userId: string
-  parentId: string | null
-  createdAt: string
-  updatedAt: string
+  id: string;
+  content: string;
+  postId: string;
+  userId: string;
+  parentId: string | null;
+  createdAt: string;
+  updatedAt: string;
   user: {
-    name: string | null
-    image: string | null
-  }
-  replies: Comment[]
+    name: string | null;
+    image: string | null;
+  };
+  replies: Comment[];
 }
 
 interface CommentSectionProps {
-  postId: string
-  userId: string
+  postId: string;
+  userId: string;
 }
 
 export function CommentSection({ postId, userId }: CommentSectionProps) {
-  const router = useRouter()
-  const [comments, setComments] = useState<Comment[]>([])
-  const [content, setContent] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingComments, setIsLoadingComments] = useState(true)
+  const router = useRouter();
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [content, setContent] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingComments, setIsLoadingComments] = useState(true);
 
   useEffect(() => {
     async function fetchComments() {
       try {
-        const response = await fetch(`/api/comments?postId=${postId}`)
+        const response = await fetch(`/api/comments?postId=${postId}`);
         if (response.ok) {
-          const data = await response.json()
-          setComments(data)
+          const data = await response.json();
+          setComments(data);
         }
       } catch (error) {
-        console.error("Error fetching comments:", error)
+        console.error("Error fetching comments:", error);
       } finally {
-        setIsLoadingComments(false)
+        setIsLoadingComments(false);
       }
     }
 
-    fetchComments()
-  }, [postId])
+    fetchComments();
+  }, [postId]);
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!content.trim()) return
+    if (!content.trim()) return;
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/comments", {
@@ -74,28 +74,28 @@ export function CommentSection({ postId, userId }: CommentSectionProps) {
           postId,
           userId,
         }),
-      })
+      });
 
       if (response.ok) {
-        const newComment = await response.json()
-        setComments((prev) => [newComment, ...prev])
-        setContent("")
+        const newComment = await response.json();
+        setComments((prev) => [newComment, ...prev]);
+        setContent("");
         toast({
           title: "Comment added",
           description: "Your comment has been added successfully.",
-        })
-        router.refresh()
+        });
+        router.refresh();
       } else {
-        throw new Error("Failed to add comment")
+        throw new Error("Failed to add comment");
       }
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to add comment. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -132,14 +132,20 @@ export function CommentSection({ postId, userId }: CommentSectionProps) {
                 <div className="flex items-start gap-4">
                   <Avatar>
                     <AvatarImage src={comment.user.image || undefined} />
-                    <AvatarFallback>{comment.user.name?.charAt(0) || "U"}</AvatarFallback>
+                    <AvatarFallback>
+                      {comment.user.name?.charAt(0) || "U"}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">{comment.user.name || "Anonymous"}</p>
+                        <p className="font-medium">
+                          {comment.user.name || "Anonymous"}
+                        </p>
                         <p className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                          {formatDistanceToNow(new Date(comment.createdAt), {
+                            addSuffix: true,
+                          })}
                         </p>
                       </div>
                     </div>
@@ -150,10 +156,11 @@ export function CommentSection({ postId, userId }: CommentSectionProps) {
             </Card>
           ))
         ) : (
-          <div className="text-center py-4">No comments yet. Be the first to comment!</div>
+          <div className="text-center py-4">
+            No comments yet. Be the first to comment!
+          </div>
         )}
       </div>
     </div>
-  )
+  );
 }
-
