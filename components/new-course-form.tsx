@@ -80,7 +80,10 @@ export function NewCourseForm({ userId }: NewCourseFormProps) {
       router.refresh();
     } catch (error) {
       toast.error("Error", {
-        description: "Failed to create course. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while creating the course.",
       });
     } finally {
       setIsLoading(false);

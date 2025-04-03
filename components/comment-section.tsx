@@ -91,8 +91,9 @@ export function CommentSection({ postId, userId }: CommentSectionProps) {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to add comment. Please try again.",
-        variant: "destructive",
+        description:
+          error instanceof Error ? error.message : "Failed to add comment",
+        // variant: "destructive",
       });
     } finally {
       setIsLoading(false);

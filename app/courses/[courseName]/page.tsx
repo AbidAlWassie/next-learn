@@ -1,5 +1,5 @@
 // app/courses/[courseName]/page.tsx
-import { auth } from "@/app/(auth)/auth";
+// import { auth } from "@/app/(auth)/auth";
 import { NavBar } from "@/components/nav-bar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
 import { formatDistanceToNow } from "date-fns";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -22,7 +23,7 @@ interface CoursePageProps {
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
-  const session = await auth();
+  // const session = await auth();
 
   const course = await prisma.course.findUnique({
     where: {
@@ -64,7 +65,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
               <div className="flex items-center gap-2">
                 <div className="relative h-10 w-10 overflow-hidden rounded-full">
                   {course.user.image ? (
-                    <img
+                    <Image
                       src={course.user.image || "/placeholder.svg"}
                       alt={course.user.name || "Instructor"}
                       className="object-cover"

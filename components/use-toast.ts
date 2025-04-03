@@ -23,12 +23,22 @@ type ToasterToast = ToastProps & {
   onOpenChange?: (open: boolean) => void; // Added the missing 'onOpenChange' property
 };
 
-const actionTypes = {
+type ActionTypeKeys = {
+  ADD_TOAST: "ADD_TOAST";
+  UPDATE_TOAST: "UPDATE_TOAST";
+  DISMISS_TOAST: "DISMISS_TOAST";
+  REMOVE_TOAST: "REMOVE_TOAST";
+};
+
+const _actionTypes: ActionTypeKeys = {
   ADD_TOAST: "ADD_TOAST",
   UPDATE_TOAST: "UPDATE_TOAST",
   DISMISS_TOAST: "DISMISS_TOAST",
   REMOVE_TOAST: "REMOVE_TOAST",
-} as const;
+};
+const actionTypes = {
+  ..._actionTypes,
+};
 
 let count = 0;
 
@@ -37,7 +47,7 @@ function genId() {
   return count.toString();
 }
 
-type ActionType = typeof actionTypes;
+type ActionType = typeof actionTypes & ActionTypeKeys;
 
 type Action =
   | {

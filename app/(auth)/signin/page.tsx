@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRouter, useSearchParams } from "next/navigation";
+// import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { SignInForm } from "../components/SignInForm";
 import { SignUpForm } from "../components/SignUpForm";
@@ -17,9 +17,10 @@ import { SignUpForm } from "../components/SignUpForm";
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [isLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
 
   // const handleSignIn = async () => {
   //   setIsLoading(true);
@@ -90,10 +91,10 @@ export default function SignInPage() {
             </TabsContent>
             <TabsContent value="signup">
               <SignUpForm
-                onSuccess={() => console.log("sign up triggered")}
-                onError={() => console.log("sign up triggered")}
-                // onSuccess={handleSignUpSuccess}
-                // onError={handleSignUpError}
+              // onSuccess={() => console.log("sign up triggered")}
+              // onError={() => console.log("sign up triggered")}
+              // onSuccess={handleSignUpSuccess}
+              // onError={handleSignUpError}
               />
             </TabsContent>
           </Tabs>

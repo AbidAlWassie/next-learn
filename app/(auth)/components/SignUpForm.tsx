@@ -7,16 +7,18 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
-interface SignUpFormProps {
-  onSuccess: () => void;
-  onError: (error: string) => void;
-}
+// interface SignUpFormProps {
+//   onSuccess: () => void;
+//   onError: (error: string) => void;
+// }
 
-export function SignUpForm({ onSuccess, onError }: SignUpFormProps) {
+export function SignUpForm() {
+  // export function SignUpForm({ onSuccess, onError }: SignUpFormProps) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();

@@ -98,7 +98,10 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
       router.refresh();
     } catch (error) {
       toast.error("Error", {
-        description: "Failed to create post. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to create post. Please try again.",
       });
     } finally {
       setIsLoading(false);

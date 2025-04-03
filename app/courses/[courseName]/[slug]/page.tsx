@@ -5,17 +5,20 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
 import { formatDistanceToNow } from "date-fns";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface PostPageProps {
+// Update the interface to match Next.js 15 expectations
+interface PageProps {
   params: {
     courseName: string;
     slug: string;
   };
+  searchParams: Record<string, string | string[] | undefined>;
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage({ params }: PageProps) {
   const session = await auth();
 
   const post = await prisma.post.findFirst({
@@ -64,7 +67,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 <div className="flex items-center gap-2">
                   <div className="relative h-10 w-10 overflow-hidden rounded-full">
                     {post.course.user.image ? (
-                      <img
+                      <Image
                         src={post.course.user.image || "/placeholder.svg"}
                         alt={post.course.user.name || "Instructor"}
                         className="object-cover"
