@@ -16,13 +16,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface CoursePageProps {
-  params: {
-    courseName: string;
-  };
-}
-
-export default async function CoursePage({ params }: CoursePageProps) {
+export default async function CoursePage({
+  params,
+}: {
+  params: { courseName: string };
+}) {
   // const session = await auth();
 
   const course = await prisma.course.findUnique({
@@ -36,7 +34,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
           image: true,
         },
       },
-      posts: {
+      lessons: {
         where: {
           published: true,
         },
@@ -69,6 +67,8 @@ export default async function CoursePage({ params }: CoursePageProps) {
                       src={course.user.image || "/placeholder.svg"}
                       alt={course.user.name || "Instructor"}
                       className="object-cover"
+                      width={40}
+                      height={40}
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-muted">
@@ -84,9 +84,9 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 </div>
               </div>
               <div>
-                <p className="text-sm font-medium">Posts</p>
+                <p className="text-sm font-medium">Lessons</p>
                 <p className="text-sm text-muted-foreground">
-                  {course.posts.length} lessons
+                  {course.lessons.length} lessons
                 </p>
               </div>
             </div>
@@ -95,25 +95,25 @@ export default async function CoursePage({ params }: CoursePageProps) {
             <h2 className="text-2xl font-bold tracking-tight">
               Course Content
             </h2>
-            {course.posts.length > 0 ? (
+            {course.lessons.length > 0 ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {course.posts.map((post) => (
+                {course.lessons.map((lesson) => (
                   <Link
-                    key={post.id}
-                    href={`/courses/${course.courseName}/${post.slug}`}
+                    key={lesson.id}
+                    href={`/courses/${course.courseName}/${lesson.slug}`}
                   >
                     <Card className="h-full overflow-hidden transition-all hover:border-primary">
                       <CardHeader className="pb-3">
                         <CardTitle className="line-clamp-1 text-lg">
-                          {post.title}
+                          {lesson.title}
                         </CardTitle>
                         <CardDescription className="line-clamp-2">
-                          {post.content.substring(0, 100)}...
+                          {lesson.content.substring(0, 100)}...
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="pb-3">
                         <div className="flex flex-wrap gap-2">
-                          {post.tags.map((tag) => (
+                          {lesson.tags.map((tag) => (
                             <Badge key={tag} variant="secondary">
                               {tag}
                             </Badge>
@@ -122,7 +122,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                       </CardContent>
                       <CardFooter className="text-xs text-muted-foreground">
                         Updated{" "}
-                        {formatDistanceToNow(new Date(post.updatedAt), {
+                        {formatDistanceToNow(new Date(lesson.updatedAt), {
                           addSuffix: true,
                         })}
                       </CardFooter>

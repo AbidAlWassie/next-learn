@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if slug is already taken for this course
-    const existingPost = await prisma.post.findUnique({
+    const existingLesson = await prisma.lesson.findUnique({
       where: {
         courseId_slug: {
           courseId,
@@ -34,15 +34,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (existingPost) {
+    if (existingLesson) {
       return NextResponse.json(
         { error: "Slug already taken for this course" },
         { status: 400 }
       );
     }
 
-    // Create the post
-    const post = await prisma.post.create({
+    // Create the lesson
+    const lesson = await prisma.lesson.create({
       data: {
         title,
         slug,
@@ -53,9 +53,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(post);
+    return NextResponse.json(lesson);
   } catch (error) {
-    console.error("Error creating post:", error);
+    console.error("Error creating lesson:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -92,7 +92,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const posts = await prisma.post.findMany({
+    const lessons = await prisma.lesson.findMany({
       where: {
         courseId,
       },
@@ -101,9 +101,9 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(posts);
+    return NextResponse.json(lessons);
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    console.error("Error fetching lessons:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

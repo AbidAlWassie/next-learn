@@ -13,59 +13,61 @@ import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-interface PostDetailPageProps {
+interface LessonDetailPageProps {
   params: {
     courseId: string;
-    postId: string;
+    lessonId: string;
   };
 }
 
-export default async function PostDetailPage({ params }: PostDetailPageProps) {
+export default async function LessonDetailPage({
+  params,
+}: LessonDetailPageProps) {
   const session = await auth();
 
   if (!session?.user) {
     redirect("/signin");
   }
 
-  const post = await prisma.post.findUnique({
+  const lesson = await prisma.lesson.findUnique({
     where: {
-      id: params.postId,
+      id: params.lessonId,
     },
     include: {
       course: true,
     },
   });
 
-  if (!post) {
+  if (!lesson) {
     notFound();
   }
 
   // Check if the user is the owner of the course
-  if (post.course.userId !== session.user.id) {
+  if (lesson.course.userId !== session.user.id) {
     redirect("/dashboard");
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{lesson.title}</h1>
         <div className="flex items-center gap-4">
           <Link
-            href={`/dashboard/courses/${params.courseId}/posts/${params.postId}/edit`}
+            href={`/dashboard/courses/${params.courseId}/lessons/${params.lessonId}/edit`}
           >
-            <Button variant="outline">Edit Post</Button>
+            <Button variant="outline">Edit Lesson</Button>
           </Link>
           <Link
-            href={`/courses/${post.course.courseName}/${post.slug}`}
+            href={`/courses/${lesson.course.courseName}/${lesson.slug}`}
             target="_blank"
           >
-            <Button>View Post</Button>
+            <Button>View Lesson</Button>
           </Link>
         </div>
       </div>
       <div className="flex items-center gap-4">
         <div>
-          {post.published ? (
+          {lesson.published ? (
             <Badge>Published</Badge>
           ) : (
             <Badge variant="outline">Draft</Badge>
@@ -73,29 +75,29 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
         </div>
         <div className="text-sm text-muted-foreground">
           Updated{" "}
-          {formatDistanceToNow(new Date(post.updatedAt), { addSuffix: true })}
+          {formatDistanceToNow(new Date(lesson.updatedAt), { addSuffix: true })}
         </div>
       </div>
       <Card>
         <CardHeader>
           <CardTitle>Content</CardTitle>
-          <CardDescription>Preview of your post content</CardDescription>
+          <CardDescription>Preview of your lesson content</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="prose max-w-none dark:prose-invert">
-            <pre className="whitespace-pre-wrap">{post.content}</pre>
+            <pre className="whitespace-pre-wrap">{lesson.content}</pre>
           </div>
         </CardContent>
       </Card>
       <Card>
         <CardHeader>
           <CardTitle>Tags</CardTitle>
-          <CardDescription>Tags associated with this post</CardDescription>
+          <CardDescription>Tags associated with this lesson</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            {post.tags.length > 0 ? (
-              post.tags.map((tag) => (
+            {lesson.tags.length > 0 ? (
+              lesson.tags.map((tag) => (
                 <Badge key={tag} variant="secondary">
                   {tag}
                 </Badge>

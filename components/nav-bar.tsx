@@ -7,7 +7,7 @@ export async function NavBar() {
   const session = await auth();
 
   return (
-    <header className="border-b">
+    <header className="flex justify-center border-b">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/" className="text-2xl font-bold">

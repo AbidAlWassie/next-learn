@@ -40,14 +40,14 @@ export default async function DashboardPage() {
     take: 5,
   });
 
-  // Count total courses and posts
+  // Count total courses and lessons
   const courseCount = await prisma.course.count({
     where: {
       userId,
     },
   });
 
-  const postCount = await prisma.post.count({
+  const lessonCount = await prisma.lesson.count({
     where: {
       course: {
         userId,
@@ -76,7 +76,7 @@ export default async function DashboardPage() {
             <Layers className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{postCount}</div>
+            <div className="text-2xl font-bold">{lessonCount}</div>
           </CardContent>
         </Card>
       </div>

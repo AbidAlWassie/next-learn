@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 interface Comment {
   id: string;
   content: string;
-  postId: string;
+  lessonId: string;
   userId: string;
   parentId: string | null;
   createdAt: string;
@@ -27,11 +27,11 @@ interface Comment {
 }
 
 interface CommentSectionProps {
-  postId: string;
+  lessonId: string;
   userId: string;
 }
 
-export function CommentSection({ postId, userId }: CommentSectionProps) {
+export function CommentSection({ lessonId, userId }: CommentSectionProps) {
   const router = useRouter();
   const [comments, setComments] = useState<Comment[]>([]);
   const [content, setContent] = useState("");
@@ -41,7 +41,7 @@ export function CommentSection({ postId, userId }: CommentSectionProps) {
   useEffect(() => {
     async function fetchComments() {
       try {
-        const response = await fetch(`/api/comments?postId=${postId}`);
+        const response = await fetch(`/api/comments?lessonId=${lessonId}`);
         if (response.ok) {
           const data = await response.json();
           setComments(data);
@@ -54,7 +54,7 @@ export function CommentSection({ postId, userId }: CommentSectionProps) {
     }
 
     fetchComments();
-  }, [postId]);
+  }, [lessonId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -71,7 +71,7 @@ export function CommentSection({ postId, userId }: CommentSectionProps) {
         },
         body: JSON.stringify({
           content,
-          postId,
+          lessonId,
           userId,
         }),
       });
@@ -116,7 +116,7 @@ export function CommentSection({ postId, userId }: CommentSectionProps) {
             />
             <div className="flex justify-end">
               <Button type="submit" disabled={isLoading || !content.trim()}>
-                {isLoading ? "Posting..." : "Post Comment"}
+                {isLoading ? "Lessoning..." : "Lesson Comment"}
               </Button>
             </div>
           </form>

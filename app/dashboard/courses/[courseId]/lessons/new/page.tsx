@@ -1,15 +1,15 @@
 import { auth } from "@/app/(auth)/auth";
-import { NewPostForm } from "@/components/new-post-form";
+import { NewLessonForm } from "@/components/new-lesson-form";
 import { prisma } from "@/lib/prisma";
 import { notFound, redirect } from "next/navigation";
 
-interface NewPostPageProps {
+interface NewLessonPageProps {
   params: {
     courseId: string;
   };
 }
 
-export default async function NewPostPage({ params }: NewPostPageProps) {
+export default async function NewLessonPage({ params }: NewLessonPageProps) {
   const session = await auth();
 
   if (!session?.user) {
@@ -34,12 +34,14 @@ export default async function NewPostPage({ params }: NewPostPageProps) {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Create a New Post</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Create a New Lesson
+        </h1>
         <p className="text-muted-foreground">
-          Create a new post for your course: {course.name}
+          Create a new lesson for your course: {course.name}
         </p>
       </div>
-      <NewPostForm courseId={params.courseId} />
+      <NewLessonForm courseId={params.courseId} />
     </div>
   );
 }

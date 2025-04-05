@@ -22,7 +22,7 @@ export default async function CoursesPage() {
       },
       _count: {
         select: {
-          posts: {
+          lessons: {
             where: {
               published: true,
             },
@@ -39,7 +39,7 @@ export default async function CoursesPage() {
     <div className="flex min-h-screen flex-col">
       <NavBar />
       <main className="flex-1">
-        <div className="container py-8">
+        <div className="py-8">
           <div className="mb-8 space-y-4">
             <h1 className="text-4xl font-bold tracking-tight">
               Browse Courses
@@ -67,7 +67,7 @@ export default async function CoursesPage() {
                     <CardContent className="pb-3">
                       <div className="flex items-center justify-between">
                         <Badge variant="outline">
-                          {course._count.posts} lessons
+                          {course._count.lessons} lessons
                         </Badge>
                         <span className="text-sm text-muted-foreground">
                           By {course.user.name || "Anonymous"}

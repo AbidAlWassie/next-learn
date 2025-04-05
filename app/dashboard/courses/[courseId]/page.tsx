@@ -1,5 +1,5 @@
 import { auth } from "@/app/(auth)/auth";
-import { PostList } from "@/components/post-list";
+import { LessonList } from "@/components/lesson-list";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,7 +33,7 @@ export default async function CourseDetailPage({
       id: params.courseId,
     },
     include: {
-      posts: {
+      lessons: {
         orderBy: {
           updatedAt: "desc",
         },
@@ -54,10 +54,10 @@ export default async function CourseDetailPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">{course.name}</h1>
-        <Link href={`/dashboard/courses/${course.id}/posts/new`}>
+        <Link href={`/dashboard/courses/${course.id}/lessons/new`}>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            New Post
+            New Lesson
           </Button>
         </Link>
       </div>
@@ -97,13 +97,13 @@ export default async function CourseDetailPage({
           <CardContent>
             <div className="space-y-4">
               <div>
-                <h3 className="font-medium">Total Posts</h3>
-                <p className="text-2xl font-bold">{course.posts.length}</p>
+                <h3 className="font-medium">Total Lessons</h3>
+                <p className="text-2xl font-bold">{course.lessons.length}</p>
               </div>
               <div>
-                <h3 className="font-medium">Published Posts</h3>
+                <h3 className="font-medium">Published Lessons</h3>
                 <p className="text-2xl font-bold">
-                  {course.posts.filter((post) => post.published).length}
+                  {course.lessons.filter((lesson) => lesson.published).length}
                 </p>
               </div>
             </div>
@@ -111,8 +111,8 @@ export default async function CourseDetailPage({
         </Card>
       </div>
       <div>
-        <h2 className="text-xl font-bold tracking-tight">Posts</h2>
-        <PostList posts={course.posts} courseId={course.id} />
+        <h2 className="text-xl font-bold tracking-tight">Lessons</h2>
+        <LessonList lessons={course.lessons} courseId={course.id} />
       </div>
     </div>
   );

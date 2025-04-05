@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { content, postId, userId, parentId } = body;
+    const { content, lessonId, userId, parentId } = body;
 
     // Verify that the authenticated user is the same as the user ID in the request
     if (session.user.id !== userId) {
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const comment = await prisma.comment.create({
       data: {
         content,
-        postId,
+        lessonId,
         userId,
         parentId,
       },
@@ -49,19 +49,19 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
-    const postId = url.searchParams.get("postId");
+    const lessonId = url.searchParams.get("lessonId");
 
-    if (!postId) {
+    if (!lessonId) {
       return NextResponse.json(
-        { error: "Post ID is required" },
+        { error: "Lesson ID is required" },
         { status: 400 }
       );
     }
 
-    // Fetch comments for the post
+    // Fetch comments for the lesson
     const comments = await prisma.comment.findMany({
       where: {
-        postId,
+        lessonId,
         parentId: null, // Only fetch top-level comments
       },
       include: {

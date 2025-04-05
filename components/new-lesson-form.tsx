@@ -44,11 +44,11 @@ const formSchema = z.object({
 // Define the type for our form values
 type FormValues = z.infer<typeof formSchema>;
 
-interface NewPostFormProps {
+interface NewLessonFormProps {
   courseId: string;
 }
 
-export function NewPostForm({ courseId }: NewPostFormProps) {
+export function NewLessonForm({ courseId }: NewLessonFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,7 +74,7 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
         ? values.tags.split(",").map((tag) => tag.trim())
         : [];
 
-      const response = await fetch("/api/posts", {
+      const response = await fetch("/api/lessons", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,21 +87,21 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create post");
+        throw new Error("Failed to create lesson");
       }
 
-      const post = await response.json();
-      toast.success("Post created", {
-        description: "Your post has been created successfully.",
+      const lesson = await response.json();
+      toast.success("Lesson created", {
+        description: "Your lesson has been created successfully.",
       });
-      router.push(`/dashboard/courses/${courseId}/posts/${post.id}`);
+      router.push(`/dashboard/courses/${courseId}/lessons/${lesson.id}`);
       router.refresh();
     } catch (error) {
       toast.error("Error", {
         description:
           error instanceof Error
             ? error.message
-            : "Failed to create post. Please try again.",
+            : "Failed to create lesson. Please try again.",
       });
     } finally {
       setIsLoading(false);
@@ -122,7 +122,7 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                   <FormControl>
                     <Input placeholder="Introduction to HTML" {...field} />
                   </FormControl>
-                  <FormDescription>The title of your post.</FormDescription>
+                  <FormDescription>The title of your lesson.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -137,7 +137,7 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                     <Input placeholder="introduction-to-html" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This will be used in the URL of your post.
+                    This will be used in the URL of your lesson.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -151,13 +151,13 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                   <FormLabel>Content</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Write your post content here..."
+                      placeholder="Write your lesson content here..."
                       className="min-h-[300px]"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    The content of your post. You can use Markdown for
+                    The content of your lesson. You can use Markdown for
                     formatting.
                   </FormDescription>
                   <FormMessage />
@@ -174,7 +174,7 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                     <Input placeholder="html, css, beginner" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Comma-separated list of tags for your post.
+                    Comma-separated list of tags for your lesson.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -188,7 +188,7 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Published</FormLabel>
                     <FormDescription>
-                      Make this post visible to students.
+                      Make this lesson visible to students.
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -210,7 +210,7 @@ export function NewPostForm({ courseId }: NewPostFormProps) {
                 Cancel
               </Button>
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Creating..." : "Create Post"}
+                {isLoading ? "Creating..." : "Create Lesson"}
               </Button>
             </div>
           </form>

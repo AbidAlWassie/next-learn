@@ -83,14 +83,14 @@ model Course {
   courseName   String    @unique
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  posts       Post[]
+  lessons       Lesson[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([userId])
 }
 
-model Post {
+model Lesson {
   id        String   @id @default(cuid())
   title     String
   slug      String
@@ -113,8 +113,8 @@ model Post {
 model Comment {
   id        String   @id @default(cuid())
   content   String   @db.Text
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   parentId  String?  // For nested comments
@@ -123,7 +123,7 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([postId])
+  @@index([lessonId])
   @@index([userId])
   @@index([parentId])
 }
@@ -132,14 +132,14 @@ model Comment {
 model Reaction {
   id        String   @id @default(cuid())
   type      ReactionType
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
-  @@unique([postId, userId, type])
-  @@index([postId])
+  @@unique([lessonId, userId, type])
+  @@index([lessonId])
   @@index([userId])
 }
 
